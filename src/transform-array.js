@@ -4,7 +4,7 @@ const { NotImplementedError } = require('../extensions/index.js');
  * Create transformed array based on the control sequences that original
  * array contains
  * 
- * @param {Array} arr initial array
+ * @param {Array} arrCopy initial array
  * @returns {Array} transformed array
  * 
  * @example
@@ -13,9 +13,29 @@ const { NotImplementedError } = require('../extensions/index.js');
  * transform([1, 2, 3, '--discard-prev', 4, 5]) => [1, 2, 4, 5]
  * 
  */
-function transform(/* arr */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function transform(arr) {
+  if (!Array.isArray(arr)) {
+    throw new Error('\'arr\' parameter must be an instance of the Array!')
+  }
+  const arrCopy = [...arr]
+  for (let i = 0; i < arrCopy.length; i++) {
+    if (arrCopy[i] === '--double-next') {
+      arrCopy[i] = arrCopy[i + 1]
+    }
+    if (arrCopy[i] === '--double-prev'){
+      arrCopy[i] = arrCopy[i - 1]
+    }
+
+    if (arrCopy[i] === '--discard-prev') {
+      arrCopy[i] = null
+      arrCopy[i - 1] = null
+    }
+    if (arrCopy[i] === '--discard-next'){
+      arrCopy[i] = null
+      arrCopy[i + 1] = null
+    }
+  }
+  return arrCopy.filter(e => e !== null && e !== undefined)
 }
 
 module.exports = {
